@@ -1,0 +1,13 @@
+Nappali;Livingroom
+Konyha;Kitchen
+Hálószoba;Bedroom
+Vendégszoba;Guest room
+Iroda;Work room
+Gardrób;Wardrobe
+Fürdőszoba;Bathroom
+Vendég WC;Guest toilet
+Vendég fürdőszoba;Guest bathroom
+Közlekedő;Corridor
+Mosókonyha;Laundry room
+Terasz;Terrace
+Erkély;Balcony

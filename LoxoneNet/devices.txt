@@ -1,0 +1,53 @@
+BEDROOM_LIGHT_MAIN;main;1776101e-0271-ac51-ffffc759e8dccb8c;AI1
+BEDROOM_LIGHT_LED;led;1776101e-0271-ac51-ffffc759e8dccb8c;AI2
+BEDROOM_LIGHT_LEFT;left;1776101e-0271-ac51-ffffc759e8dccb8c;AI3
+BEDROOM_LIGHT_RIGHT;right;1776101e-0271-ac51-ffffc759e8dccb8c;AI4
+
+KITCHEN_LIGHT_MAIN;main;177b7ff0-0067-ae48-ffffc759e8dccb8c;AI1
+KITCHEN_LIGHT_LOWER_LED;lower led;177b7ff0-0067-ae48-ffffc759e8dccb8c;AI2
+KITCHEN_LIGHT_UPPER_LED;upper led;177b7ff0-0067-ae48-ffffc759e8dccb8c;AI3
+
+LIVINGROOM_LIGHT_MAIN;main;177623e8-02d6-104d-ffffc759e8dccb8c;AI1
+LIVINGROOM_LIGHT_CABINET;cabinet;177623e8-02d6-104d-ffffc759e8dccb8c;AI2
+LIVINGROOM_LIGHT_DINNER;diner;177623e8-02d6-104d-ffffc759e8dccb8c;AI3
+LIVINGROOM_LIGHT_LED;led;177623e8-02d6-104d-ffffc759e8dccb8c;AI4
+
+WORKROOM_LIGHT_MAIN;main;177b7f62-0222-d1b4-ffffc759e8dccb8c;AI1
+WORKROOM_LIGHT_LED;led;177b7f62-0222-d1b4-ffffc759e8dccb8c;AI2
+
+GUESTROOM_LIGHT_MAIN;main;177b7f60-00fb-c65d-ffffc759e8dccb8c;AI1
+GUESTROOM_LIGHT_LED;led;177b7f60-00fb-c65d-ffffc759e8dccb8c;AI2
+
+CORRIDOR_LIGHT_ENTRANCE;corridor entrance;177f666a-02da-1796-ffffc759e8dccb8c;AI1
+CORRIDOR_LIGHT_LIVINGROOM1;corridor livingroom first;177f666a-02da-1796-ffffc759e8dccb8c;AI3
+CORRIDOR_LIGHT_LIVINGROOM2;corridor livingroom second;177f666a-02da-1796-ffffc759e8dccb8c;AI4
+CORRIDOR_LIGHT_MAIN;corridor main;177f6b29-0016-477b-ffff5105aa285bf2;AI1
+CORRIDOR_LIGHT_CORNER;corridor corner;177f6b29-0016-477b-ffff5105aa285bf2;AI2
+
+WARDROBE_LIGHT_1;wardrobe 1;1c12100a-01ce-e2dc-ffffc759e8dccb8c;AI1
+WARDROBE_LIGHT_2;wardrobe 2;1c12100a-01ce-e2dc-ffffc759e8dccb8c;AI2
+
+#BEDROOM_SHUTTER;;177ff8fe-01ab-6bd9-ffff59d05cd24eb2", "manualPosition"));
+BEDROOM_SHUTTER_LEFT;left shutter;177f5f02-0343-6d34-ffff466681b0d1d2;manualPosition
+BEDROOM_SHUTTER_RIGHT;right shutter;177f5efd-03d8-55df-ffffc759e8dccb8c;manualPosition
+#KITCHEN_SHUTTER;;18747312-00a3-08a9-ffff994da91f4b8c", "manualPosition"));
+KITCHEN_SHUTTER_LEFT;left shutter;1779fa6f-01a5-fcdb-ffffd3f8789bfa77;manualPosition
+KITCHEN_SHUTTER_RIGHT;right shutter;1779fa50-00b2-db8d-ffff498cf35cb1b1;manualPosition
+#LIVINGROOM_SHUTTER;;177f5239-014a-f2dc-ffffc759e8dccb8c", "manualPosition"));
+LIVINGROOM_SHUTTER_TERRACE_RIGHT_WINDOW;terrace right window;1779fb60-0251-c683-ffff8b4bd73e97cf;manualPosition
+LIVINGROOM_SHUTTER_TERRACE_DOOR;terrace door;1779c3db-0257-a542-ffff65ad3f3e5155;manualPosition
+LIVINGROOM_SHUTTER_TERRACE_LEFT_WINDOW;terrace left window;1779fb5f-02e0-bd6d-ffff9956f48ba621;manualPosition
+LIVINGROOM_SHUTTER_TERRACE_LEFT_DOOR;terrace left door;17eb7f1b-039d-afa8-ffff823f6a31bb72;manualPosition
+LIVINGROOM_SHUTTER_DINER1;diner 1;1779fc83-0049-7d92-ffff0e8d278794d3;manualPosition
+LIVINGROOM_SHUTTER_DINER2;diner 2;1779fc82-01cd-740c-ffff05658b370e63;manualPosition
+LIVINGROOM_SHUTTER_DINER34;diner 3;1779fd35-0234-aa68-ffff9c50071b2567;manualPosition
+LIVINGROOM_SHUTTER_DINER5;diner 5;17eb7cf2-0180-990b-ffff7c911b129d19;manualPosition
+#WORKROOM_SHUTTER;;177f5771-029d-5da2-ffffc759e8dccb8c", "manualPosition"));
+WORKROOM_SHUTTER_LEFT;left shutter;1779c3dd-0273-c496-ffff7ef40dc2547e;manualPosition
+WORKROOM_SHUTTER_RIGHT;right shutter;1835082c-02cc-0e7f-ffff31b41a4a00be;manualPosition
+#GUESTROOM_SHUTTER;;177f574c-034e-17ed-ffffc759e8dccb8c", "manualPosition"));
+GUESTROOM_SHUTTER_LEFT;left shutter;1779c3dc-03b7-b488-ffff90c8b5a26a57;manualPosition
+GUESTROOM_SHUTTER_RIGHT;right shutter;1779c3dc-01ee-accc-ffff0adc23cb47a5;manualPosition
+
+BEDROOM_TEMPERATURE;temperature;1d082394-027c-af82-ffff981168cf4800;value
+LIVINGROOM_TEMPERATURE;temperature;1a0a9ac5-00bf-4ba1-ffffc759e8dccb8c;value
