@@ -22,7 +22,7 @@ namespace LoxoneNet;
 
 public class LoxoneWebSocketConnection
 {
-    private readonly string _url;
+    private readonly string _hostAndPort;
     private readonly IPAddress _ipAddress;
     private readonly string _userName;
     private readonly string _password;
@@ -42,9 +42,16 @@ public class LoxoneWebSocketConnection
 
     public LoxoneWebSocketConnection(string url, string userName, string password, byte[] serviceAccountCredentialData)
     {
-        _url = url;
-        
-        var addresses = Dns.GetHostAddresses(url);
+        int idx = url.IndexOf(":", StringComparison.Ordinal);
+        string host = url;
+        if (idx != -1)
+        {
+            host = host.Substring(0, idx);
+        }
+
+        _hostAndPort = url;
+
+        var addresses = Dns.GetHostAddresses(host);
         _ipAddress = addresses[0];
         _userName = userName;
         _password = password;
@@ -54,7 +61,7 @@ public class LoxoneWebSocketConnection
     public async Task<RSA> GetPublicKey()
     {
         var httpClient = new HttpClient();
-            string response = await httpClient.GetStringAsync($"http://{_url}/jdev/sys/getPublicKey");
+        string response = await httpClient.GetStringAsync($"http://{_hostAndPort}/jdev/sys/getPublicKey");
 
         var res = JsonSerializer.Deserialize<LoxoneResponse>(response)!.LL.value;
         string base64 = res.GetString()!;
@@ -508,7 +515,7 @@ public class LoxoneWebSocketConnection
             var ws = new ClientWebSocket();
             ws.Options.KeepAliveInterval = TimeSpan.FromTicks(0xFFFFFFFEL * 10000);
             //ws.Options.Proxy = new WebProxy(new Uri("http://127.0.0.1:8888"));
-            await ws.ConnectAsync(new Uri($"ws://{_url}/ws/rfc6455"), CancellationToken.None);
+            await ws.ConnectAsync(new Uri($"ws://{_hostAndPort}/ws/rfc6455"), CancellationToken.None);
             await GetKeyExchangeAsync(ws, rsa, aes);
             await GetJwtAsync(ws, aes, _userName, _password);
             

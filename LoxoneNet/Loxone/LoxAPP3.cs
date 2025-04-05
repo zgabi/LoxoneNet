@@ -36,7 +36,7 @@ class LoxAPP3
 
     public Dictionary<int, TimeInfo> times { get; set; } = null!;
 
-    public Dictionary<Guid, Caller> caller { get; set; } = null!;
+    public Dictionary<Guid, Caller>? caller { get; set; } = null;
 
     public Dictionary<Guid, Mailer> mailer { get; set; } = null!;
 
@@ -87,11 +87,12 @@ class LoxAPP3
                 {
                     var subControl = spair.Value;
                     subControl.LoxApp3 = this;
-                    if (control.type != "EFM")
+                    if (control.type != "EFM" && control.type != "IRoomControllerV2" && control.type != "Alarm" && control.type != "SmokeAlarm" && control.type != "Intercom"
+                        && control.type != "LightControllerV2")
                     {
                         if (spair.Key.id != control.uuidAction.id)
                         {
-                            throw new Exception("SubControl Id should be the same as the parent control's id");
+                            throw new Exception("SubControl Id should be the same as the parent control's id: " + control.type);
                         }
                     }
 
@@ -135,7 +136,7 @@ class LoxAPP3
 
     public string? FindGuid(Guid guid, Guid icon, object value)
     {
-        if (guid == Guid.Parse("1775ecdd-034c-3f2c-ffff-c759e8dccb8c"))
+        if (guid == GuidConverter.StringToGuid("1775ecdd-034c-3f2c-ffff-c759e8dccb8c"))
         {
             return "unknown";
         }
@@ -171,7 +172,7 @@ class LoxAPP3
 
             return null;
         }
-        else if (caller.TryGetValue(guid, out var call))
+        else if (caller?.TryGetValue(guid, out var call) == true)
         {
             ;
         }
@@ -196,7 +197,9 @@ class LoxAPP3
             return "MESSAGECENTER STATE: " + messageCenter[mcState.Item1.id].name + " " + mcState.Item1.name + " " + mcState.Item2;
         }
 
-        throw new NotImplementedException();
+        Program.Log(LogLevel.Information, "Unknown id received: " + GuidConverter.GuidToString(guid));
+        return null;
+        //throw new Exception("Guid not found: " + GuidConverter.GuidToString(guid));
     }
 
     private bool StateReceived(Control control, string ctrlStateName, object value, out LoxoneDevice? device)

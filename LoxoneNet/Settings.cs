@@ -7,7 +7,17 @@ public sealed class Settings
     public required LogLevel LogLevel { get; set; }
     
     public required string Hostname { get; set; }
+    
+    public int HttpPort { get; set; }
+    
+    public int HttpsPort { get; set; }
 
+    public required string GoogleOAuthCode { get; set; } = "3F7183AEF20A43B482B23405B6E40BF8";
+
+    public required string GoogleClientId { get; set; }
+
+    public required string GoogleClientSecret { get; set; }
+    
     public required string GoogleAccessToken { get; set; }
     
     public required string GoogleRefreshToken { get; set; }
@@ -24,11 +34,11 @@ public sealed class Settings
     
     public required string CertOrganizationUnit { get; set; }
 
-    public required string? DsmrReaderAddress { get; set; }
+    public string? DsmrReaderAddress { get; set; }
     
     public required ushort DsmrReaderPort { get; set; }
 
-    public required string? GrowattServerHost { get; set; }
+    public string? GrowattServerHost { get; set; }
     
     public required string GrowattUserName { get; set; }
     

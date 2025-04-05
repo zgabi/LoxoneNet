@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using System.Web;
 using Certes;
 using Certes.Acme;
+using Certes.Acme.Resource;
 using LoxoneNet.DSMR;
 using LoxoneNet.SmartHome;
 using Microsoft.AspNetCore.Builder;
@@ -103,13 +104,13 @@ public class Program
             return;
         }
 
-        if (settings.DsmrReaderAddress != null)
+        if (!string.IsNullOrEmpty(settings.DsmrReaderAddress))
         {
             _p1Reader = new P1Reader();
             _p1Reader.Start(settings.DsmrReaderAddress, settings.DsmrReaderPort);
         }
 
-        if (settings.GrowattServerHost != null)
+        if (!string.IsNullOrEmpty(settings.GrowattServerHost))
         {
             _growatt = new Growatt.Growatt();
             _growatt.Start(settings.GrowattServerHost);
@@ -234,7 +235,7 @@ public class Program
             builder.Logging.SetMinimumLevel(LogLevel.Trace);
             builder.WebHost.ConfigureKestrel(options =>
             {
-                options.ListenAnyIP(8082, listenOptions =>
+                options.ListenAnyIP(settings.HttpsPort, listenOptions =>
                 {
                     listenOptions.UseHttps(httpsOptions =>
                     {
@@ -245,7 +246,10 @@ public class Program
                     });
                 });
 
-                options.Listen(IPAddress.Any, 81, listenOptions => { });
+                if (settings.HttpPort != 0)
+                {
+                    options.Listen(IPAddress.Any, settings.HttpPort, listenOptions => { });
+                }
             });
 
             var app = builder.Build();
@@ -282,12 +286,20 @@ public class Program
                 }
 
                 Log($"Waiting for ACME challenge. path: {_acmePath}, auth: {_acmeAuth}");
-                await Task.Delay(3000);
-                while (!_authorized)
+                while (!_authorized || ((await order.Resource()).Status != OrderStatus.Ready && (await order.Resource()).Status != OrderStatus.Pending))
                 {
+                    if (_authorized)
+                    {
+                        var order1 = await order.Resource();
+                        if (order1.Status == OrderStatus.Ready || order1.Status == OrderStatus.Pending)
+                        {
+                            break;
+                        }
+                    }
+
                     await Task.Delay(100);
                 }
-                
+         
                 Log("ACME challenge received. " + challange.Status);
 
                 var privateKey = KeyFactory.NewKey(KeyAlgorithm.RS256);
@@ -439,50 +451,61 @@ public class Program
             var sr = new StreamReader(request.Body);
             var body = await sr.ReadToEndAsync();
 
-            string redirectUri = request.Query["redirect_uri"].Single();
-            string state = request.Query["state"].Single();
-
-            string responseUrl = $"{redirectUri}?code={"xxxxxx"}&state={state}";
-            response.Redirect(responseUrl);
-            return;
+            string clientId = request.Query["client_id"].Single();
+            if (string.IsNullOrEmpty(Settings.GoogleClientId) || Settings.GoogleClientId == clientId)
+            {
+                string redirectUri = request.Query["redirect_uri"].Single();
+                string state = request.Query["state"].SingleOrDefault();
+                string responseUrl = $"{redirectUri}?code={Settings.GoogleClientSecret}&state={state}";
+                response.Redirect(responseUrl);
+                return;
+            }
         }
 
         if (path == "/token")
         {
-            string grantType = request.Form["grant_type"].Single();
+            string code = request.Form["code"].Single();
+            string clientId = request.Form["client_id"].Single();
+            string clientSecret = request.Form["client_secret"].Single();
 
-            const int secondsInDay = 86400;
-
-            TokenResponse response1;
-            if (grantType == "authorization_code")
+            if (code == Settings.GoogleOAuthCode
+                && (string.IsNullOrEmpty(Settings.GoogleClientId) || Settings.GoogleClientId == clientId)
+                && (string.IsNullOrEmpty(Settings.GoogleClientSecret) || Settings.GoogleClientSecret == clientSecret))
             {
-                response1 = new TokenResponse
+                string grantType = request.Form["grant_type"].Single();
+                const int secondsInDay = 86400;
+
+                TokenResponse response1;
+                if (grantType == "authorization_code")
                 {
-                    token_type = "bearer",
-                    access_token = Settings.GoogleAccessToken,
-                    refresh_token = Settings.GoogleRefreshToken,
-                    expires_in = secondsInDay,
-                };
-            }
-            else
-            {
-                response1 = new TokenResponse
+                    response1 = new TokenResponse
+                    {
+                        token_type = "bearer",
+                        access_token = Settings.GoogleAccessToken,
+                        refresh_token = Settings.GoogleRefreshToken,
+                        expires_in = secondsInDay,
+                    };
+                }
+                else
                 {
-                    token_type = "bearer",
-                    access_token = Settings.GoogleAccessToken,
-                    expires_in = secondsInDay,
-                };
+                    response1 = new TokenResponse
+                    {
+                        token_type = "bearer",
+                        access_token = Settings.GoogleAccessToken,
+                        expires_in = secondsInDay,
+                    };
+                }
+
+                response.ContentType = "application/json";
+
+                string json = JsonSerializer.Serialize(response1, new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                });
+
+                await response.WriteAsync(json);
+                return;
             }
-
-            response.ContentType = "application/json";
-
-            string json = JsonSerializer.Serialize(response1, new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            });
-
-            await response.WriteAsync(json);
-            return;
         }
 
         response.StatusCode = 404;
