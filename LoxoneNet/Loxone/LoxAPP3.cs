@@ -136,7 +136,7 @@ class LoxAPP3
 
     public string? FindGuid(Guid guid, Guid icon, object value)
     {
-        if (guid == GuidConverter.StringToGuid("1775ecdd-034c-3f2c-ffff-c759e8dccb8c"))
+        if (guid == GuidConverter.StringToGuid("1775ecdd-034c-3f2c-ffffc759e8dccb8c"))
         {
             return "unknown";
         }

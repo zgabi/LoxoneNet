@@ -213,13 +213,10 @@ public class Program
                 string keyPem = await File.ReadAllTextAsync(KeyFileName);
 
                 cert = X509Certificate2.CreateFromPem(certPem);
-                //var ec = ECDsa.Create();
-                //ec.ImportFromPem(keyPem);
+
                 var rsa = RSA.Create();
                 rsa.ImportFromPem(keyPem);
                 cert = new X509Certificate2(cert.CopyWithPrivateKey(rsa).Export(X509ContentType.Pkcs12));
-
-                //cert = new X509Certificate2(certPath);
             }
             else
             {
@@ -313,8 +310,16 @@ public class Program
                     CommonName = settings.Hostname,
                 }, privateKey);
 
-                await File.WriteAllTextAsync(CertFileName, cert1.Certificate.ToPem());
-                await File.WriteAllTextAsync(KeyFileName, privateKey.ToPem());
+                string certPem = cert1.Certificate.ToPem();
+                string keyPem = privateKey.ToPem();
+                await File.WriteAllTextAsync(CertFileName, certPem);
+                await File.WriteAllTextAsync(KeyFileName, keyPem);
+
+                cert = X509Certificate2.CreateFromPem(certPem);
+
+                var rsa = RSA.Create();
+                rsa.ImportFromPem(keyPem);
+                cert = new X509Certificate2(cert.CopyWithPrivateKey(rsa).Export(X509ContentType.Pkcs12));
             }
 
             Log("starting Loxone connection");
@@ -456,7 +461,7 @@ public class Program
             {
                 string redirectUri = request.Query["redirect_uri"].Single();
                 string state = request.Query["state"].SingleOrDefault();
-                string responseUrl = $"{redirectUri}?code={Settings.GoogleClientSecret}&state={state}";
+                string responseUrl = $"{redirectUri}?code={Settings.GoogleOAuthCode}&state={state}";
                 response.Redirect(responseUrl);
                 return;
             }
