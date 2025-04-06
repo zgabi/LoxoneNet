@@ -462,9 +462,14 @@ public class Program
                 string redirectUri = request.Query["redirect_uri"].Single();
                 string state = request.Query["state"].SingleOrDefault();
                 string responseUrl = $"{redirectUri}?code={Settings.GoogleOAuthCode}&state={state}";
+                
+                Log(LogLevel.Debug, "auth redirect: " + responseUrl);
+
                 response.Redirect(responseUrl);
                 return;
             }
+
+            Log(LogLevel.Debug, "auth clientId mismatch. received: " + clientId);
         }
 
         if (path == "/token")
@@ -508,9 +513,13 @@ public class Program
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 });
 
+                Log(LogLevel.Debug, $"token response: {json}");
+
                 await response.WriteAsync(json);
                 return;
             }
+            
+            Log(LogLevel.Debug, $"token error. code: {code}, clientId: {clientId}, clientSecret: {clientSecret}");
         }
 
         response.StatusCode = 404;

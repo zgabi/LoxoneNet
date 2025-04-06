@@ -1,4 +1,4 @@
-Nappali;Livingroom
+Nappali;Living room
 Konyha;Kitchen
 Hálószoba;Bedroom
 Vendégszoba;Guest room
